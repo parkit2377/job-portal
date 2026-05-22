@@ -39,5 +39,12 @@ class NotFound extends ApiError {
 }
 
 
+class InternalServerError extends ApiError {
+    constructor(message = 'Internal Server Error') {
+        super(message , 500)
+    }
+}
 
-module.exports = { ApiResponse , UnAuthenticated , NotFound , BadRequest , Forbidden }
+
+
+module.exports = { ApiResponse , UnAuthenticated , NotFound , BadRequest , Forbidden , InternalServerError }
