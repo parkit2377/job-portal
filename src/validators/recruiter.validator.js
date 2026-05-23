@@ -19,7 +19,7 @@ const becomeRecruiterValidator = z.object({
 });
 
 
-const updateRecruiterQueryValidator = z.object({
+const updateRecruiterparamsValidator = z.object({
     recruiterId : objectIdSchemaValidation
 })
 
@@ -27,4 +27,4 @@ const updateRecruiterBodyValidator = becomeRecruiterValidator.partial().refine(d
 
 
 
-module.exports = { becomeRecruiterValidator , updateRecruiterBodyValidator , updateRecruiterQueryValidator }
+module.exports = { becomeRecruiterValidator , updateRecruiterBodyValidator , updateRecruiterparamsValidator }

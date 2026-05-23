@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const jobSchema = mongoose.model({
+const jobSchema = mongoose.Schema({
     title : {
         type : String,
         required : [true , "job title is required"]
@@ -40,6 +40,11 @@ const jobSchema = mongoose.model({
         type : mongoose.Schema.Types.ObjectId,
         ref : "Recruiter",
         required : [true , "recruiter is required"]
+    },
+    userId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User",
+        required : [true , "userId is required"]
     },
     isActive : {
         type : Boolean,

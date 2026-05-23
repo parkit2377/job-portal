@@ -1,5 +1,5 @@
 const express = require('express');
-const {dataValidator , queryValidator } = require('../middlewares/validator.middleware');
+const {dataValidator , paramsValidator } = require('../middlewares/validator.middleware');
 const { becomeRecruiterValidator , updateRecruiterBodyValidator } = require('../validators/recruiter.validator');
 const auth = require('../middlewares/auth.middleware');
 const { becomeRecruiter, updateRecruiter } = require('../controllers/recruiter.controller');

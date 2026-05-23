@@ -15,9 +15,9 @@ const dataValidator = (schema) => {
 }
 
 
-const queryValidator = (schema) => {
+const paramsValidator = (schema) => {
     return (req , res , next) => {
-        const validatedData = schema.safeParse(req.query);
+        const validatedData = schema.safeParse(req.params);
         
         if(!validatedData?.success)return res.status(400).json({
             status : false,
@@ -28,4 +28,4 @@ const queryValidator = (schema) => {
     }
 }
 
-module.exports = { dataValidator , queryValidator }
+module.exports = { dataValidator , paramsValidator }
