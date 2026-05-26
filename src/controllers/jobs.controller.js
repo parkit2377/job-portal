@@ -21,4 +21,9 @@ const updateJob = asyncHandler(async(req , res) => {
 })
 
 
+const removeJob = asyncHandler(async(req , res) => {
+    const removed = await jobsService.removeJob(req.params) 
+})
+
+
 module.exports = { addJob , updateJob };

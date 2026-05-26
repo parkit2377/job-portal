@@ -29,10 +29,6 @@ const jobApplySchema = mongoose.Schema({
         enum : ['0-1' , '1-2' , '2-5' , '5-8' , '8+'],
         required : [true , "candidate year of experience is required"]
     },
-    isWithdrawn : {
-        type    : Boolean,
-        default : false    
-    }
 
 
 }, { timestamps : true})

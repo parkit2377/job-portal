@@ -46,5 +46,12 @@ class InternalServerError extends ApiError {
 }
 
 
+class ConflictError extends ApiError {
+    constructor(message = 'Already Exists') {
+        super(message , 409)
+    }
+}
 
-module.exports = { ApiResponse , UnAuthenticated , NotFound , BadRequest , Forbidden , InternalServerError }
+
+
+module.exports = { ApiResponse , UnAuthenticated , NotFound , BadRequest , Forbidden , InternalServerError , ConflictError }
