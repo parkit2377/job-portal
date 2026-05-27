@@ -50,6 +50,10 @@ const jobSchema = mongoose.Schema({
         type : Boolean,
         default : true
     },
+    isOpen : {
+        type : Boolean,
+        default : true
+    },
     deletedOn : {
         type : Date,
         default : null

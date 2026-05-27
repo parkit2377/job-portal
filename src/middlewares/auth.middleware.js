@@ -11,13 +11,14 @@ const auth = asyncHandler(async(req , res , next) => {
 
     const token = header.split(' ')[1];
 
-    jwt.verify(token , process.env.API_KEY , (err , decode) => {
-        if(err)throw new UnAuthenticated("You are Not Authorized");
-        
-        
+    try {
+        jwt.verify(token , process.env.API_KEY );
         req.user = decode;
         next();
-    })
+    } catch (error) {
+        throw new UnAuthenticated('You are not authorized');
+    }
+    
 
 
 })

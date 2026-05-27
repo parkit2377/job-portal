@@ -1,3 +1,5 @@
+const { default: mongoose } = require("mongoose");
+const jobsModel = require("../models/jobs.model");
 const recuiterModel = require("../models/recuiter.model");
 const userModel = require("../models/user.model");
 const { NotFound, BadRequest, InternalServerError } = require("../utils/resposonses");
@@ -57,5 +59,23 @@ const updateRecruiter = async( body , user) => {
 
 }
 
+const deleteRecruiterService = async(params , user ) => {
+    if(params?.recruiterId !== user?.recruiterId.toString())throw new BadRequest("Recruiter can only delete its own account");
 
-module.exports = { becomeRecruiter , updateRecruiter }
+    const [updateRecruiter , updatejobs] = await Promise.all([
+        recuiterModel.findByIdAndUpdate(params.recruiterId , {
+            $set : {isActive : false}
+        } , {returnDocument : 'after'}),
+
+        jobsModel.updateMany({recruiterId : params?.recruiterId , isActive : true},{
+        $set : {isActive : false , isOpen : false}
+    }),
+    ])
+    
+
+    return updateRecruiter
+    
+}
+
+
+module.exports = { becomeRecruiter , updateRecruiter , deleteRecruiterService }

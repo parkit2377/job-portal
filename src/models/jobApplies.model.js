@@ -18,7 +18,7 @@ const jobApplySchema = mongoose.Schema({
     },
     noticePeriod : {
         type : String,
-        enum : ['immediate', '15days', '30days', '60days', '90days']
+        enum : ['immediate', '15', '30', '60', '90']
     },
     currentOrganization : {
         type : String,

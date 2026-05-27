@@ -1,7 +1,9 @@
 const userModel = require("../models/user.model")
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { BadRequest, NotFound } = require("../utils/resposonses");
+const { BadRequest, NotFound, UnAuthenticated } = require("../utils/resposonses");
+const candidateModel = require("../models/candidate.model");
+const recuiterModel = require("../models/recuiter.model");
 
 
 //register user 
@@ -19,12 +21,18 @@ const registerUser = async(validatedBody) => {
 
 const login = async(validatedBody) => {
     const user = await userModel.findOne({email : validatedBody.email});
-    if(!user)throw new NotFound("Please enter valid username and password");
+    if(!user)throw new UnAuthenticated("Please enter valid username and password");
 
 
     const verifyPassword = await bcrypt.compare(validatedBody.password , user.password);
+
+    if(!verifyPassword)throw new UnAuthenticated("Please enter valid username and password");
+
+    const [candidate , recruiter] = await Promise.all([
+        candidateModel.findOne({userId : user?._id}).select('_id'),
+        recuiterModel.findOne({userId : user._id}).select('_id')
+    ]);
     
-    if(!verifyPassword)throw new NotFound("Please enter valid username and password");
 
     const payload = {
         // name : user.name,
@@ -32,6 +40,8 @@ const login = async(validatedBody) => {
         role : user.role,
         // mobileNo : user.mobileNo,
         // dob : user.dob,
+        candidateId : candidate?._id || null,
+        recruiterId : recruiter?._id || null,
         userId : user._id
         
     }

@@ -21,8 +21,12 @@ const { ApiResponse } = require('../utils/resposonses');
 
 
     const deleteRecruiter = asyncHandler(async(req , res) => {
-        const deleted = await recruiterService.deleteRecruiter()
+        const deleted = await recruiterService.deleteRecruiterService(req.validatedquery , req.user);
+
+        res.status(200).json(
+            new ApiResponse(true , "recruiter and all jobs of recruiter deleted successfully" , deleted)
+        );
     })
 
 
-module.exports = { becomeRecruiter , updateRecruiter }
+module.exports = { becomeRecruiter , updateRecruiter , deleteRecruiter }

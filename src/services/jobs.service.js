@@ -2,7 +2,7 @@ const { param } = require("../app");
 const jobsModel = require("../models/jobs.model");
 const recuiterModel = require("../models/recuiter.model");
 const userModel = require("../models/user.model");
-const { Forbidden, InternalServerError, NotFound } = require("../utils/resposonses");
+const { Forbidden, InternalServerError, NotFound, BadRequest } = require("../utils/resposonses");
 
 
 
@@ -43,4 +43,73 @@ const updateJob = async(body , user , params) => {
 
 
 
-module.exports = { addJobService , updateJob }
+const getJobs = async(body , user) => {
+    let filter = {isActive : true};
+    // filter.isActive = true;
+    if(body?.location){
+        filter.location = { $regex: body.location, $options: 'i' };
+    }
+
+    if(body?.keySkills && body?.keySkills.length){
+        filter.keySkills = {$in : body.keySkills};
+    }
+
+    if(body?.salary?.min || body?.salary?.max){
+        filter['salary.min'] = {};
+        if(body?.salary?.min)
+            filter['salary.min'].$gte = Number(body.salary.min);
+        if(body?.salary?.max)
+            filter['salary.min'].$lte = Number(body.salary.max)
+    }
+
+    if(body?.yearOfExp)
+        filter['yearOfExp'] = body.yearOfExp;
+
+
+    // console.log(filter);
+    
+    const jobs = await jobsModel.find(filter);
+
+    return jobs;
+    
+    
+}
+
+
+
+const removeJobService = async(params , user) => {
+    // console.log(params);
+    const job = await jobsModel.findById(params?.jobId).select('recruiterId isActive');
+    
+    if(!job?.isActive)throw new BadRequest("Job already removed/inactive");
+
+    if(!job?.recruiterId?.equals(user?.recruiterId))throw new Forbidden("Only job recuiter can delete the job");
+    
+    job.isActive = false;
+
+    await job.save();
+
+    return job;
+    
+}
+
+
+const closeJobApplicationService = async(params , user) => {
+    const job = await jobsModel.findById(params?.jobId).select('recruiterId isOpen');
+
+    if(!job)throw new NotFound("job not found");
+    if(job && !job?.isOpen)throw new BadRequest("Job already not accepting applications");
+
+    if(!job?.recruiterId.equals(user?.recruiterId))throw new Forbidden("only job recruiter can close new applications");
+
+    job.isOpen = false;
+
+    await job.save();
+    
+    return job
+
+}
+
+
+
+module.exports = { addJobService , updateJob , getJobs , removeJobService , closeJobApplicationService }

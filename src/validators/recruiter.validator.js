@@ -9,22 +9,33 @@ const becomeRecruiterValidator = z.object({
     .min(3, "company name too must be atleast 3 character")
     .max(50, "company name too long"),
 
-  companyDesc : 
-    z.string().trim().min(20 , "Desriction must be atleast 20 character"),
-  
-  companySize : z.string(),
-  
-  
-//   userId :  objectIdSchemaValidation
+  companyDesc: z
+    .string()
+    .trim()
+    .min(20, "Desriction must be atleast 20 character"),
+
+  companySize: z.string(),
+
+  //   userId :  objectIdSchemaValidation
 });
 
-
 const updateRecruiterparamsValidator = z.object({
-    recruiterId : objectIdSchemaValidation
-})
+  recruiterId: objectIdSchemaValidation,
+});
 
-const updateRecruiterBodyValidator = becomeRecruiterValidator.partial().refine(d => !Object.keys(d).length == 0,{message : "Atleast one field is required to update"} )
+const updateRecruiterBodyValidator = becomeRecruiterValidator
+  .partial()
+  .refine((d) => !Object.keys(d).length == 0, {
+    message: "Atleast one field is required to update",
+  });
 
+const deleteRecuiterValidator = z.object({
+  recruiterId: objectIdSchemaValidation,
+});
 
-
-module.exports = { becomeRecruiterValidator , updateRecruiterBodyValidator , updateRecruiterparamsValidator }
+module.exports = {
+  becomeRecruiterValidator,
+  deleteRecuiterValidator,
+  updateRecruiterBodyValidator,
+  updateRecruiterparamsValidator,
+};

@@ -42,4 +42,26 @@ const updateJobParamValidation = z.object({
 })
 
 
-module.exports = { addJobValidator , updateJobValidator , updateJobParamValidation };
+const getJobsValidator = z.object({
+    location : z.string().toLowerCase()
+                .trim().optional(),
+    salary : z.object({
+        max : z.number().nullable().optional(),
+        min : z.number().nullable().optional(),
+    }).optional(),
+    yearOfExp :   z.enum(["0-1", "1-3", "3-5", "5-8", "8+"]).optional(),
+    keySkills: z.array(z.string(2)).min(1, "Atleast one requirement is required").optional(),          
+}).optional();
+
+
+const removeJobValidator = z.object({
+    jobId : objectIdSchemaValidation
+}) 
+
+
+const closeJobApplicationValidator = z.object({
+    jobId : objectIdSchemaValidation
+}) 
+
+
+module.exports = { closeJobApplicationValidator , addJobValidator , updateJobValidator , removeJobValidator , updateJobParamValidation , getJobsValidator };

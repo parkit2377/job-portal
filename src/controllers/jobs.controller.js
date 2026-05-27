@@ -22,8 +22,32 @@ const updateJob = asyncHandler(async(req , res) => {
 
 
 const removeJob = asyncHandler(async(req , res) => {
-    const removed = await jobsService.removeJob(req.params) 
+    const removed = await jobsService.removeJobService(req.validatedquery , req.user);
+    
+    res.status(200).json(
+        new ApiResponse(true , "Job Removed Successfully" , removed)
+    )
 })
 
 
-module.exports = { addJob , updateJob };
+
+const getJobs = asyncHandler(async(req , res) => {
+    const jobs = await jobsService.getJobs(req.validatedData , req.user);
+
+    res.status(200).json(
+        new ApiResponse(true , "Jobs fetched successfully" , jobs)
+    );
+})
+
+
+const closeJobApplication = asyncHandler(async(req , res) => {
+    const closed = await jobsService.closeJobApplicationService(req.validatedquery , req.user);
+
+
+    res.status(200).json(
+        new ApiResponse(true , "closed job application" , closed)
+    );
+})
+
+
+module.exports = { addJob , updateJob , getJobs , removeJob , closeJobApplication };

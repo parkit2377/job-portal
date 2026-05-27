@@ -15,6 +15,7 @@ app.use('/api/v1/users' , require('./routes/users.route'));
 app.use('/api/v1/recruiter' , require('./routes/recruiter.routes'));
 app.use('/api/v1/jobs' , require('./routes/jobs.routes'));
 app.use('/api/v1/candidate' , require('./routes/candidate.routes'));
+app.use('/api/v1/jobApplication' , require('./routes/jobApplication'));
 
 app.use(errorHandler);
 
