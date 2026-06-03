@@ -34,8 +34,10 @@ const getCandidateProfileService = async (user) => {
       path: "userId",
       match: {"isActive" : true},
       select: "name email mobileNo role dob createdAt",
-    });
+    })
   console.log(candidate);
+  if(!candidate) throw new NotFound("Candidate profile not found");
+  return candidate
 };
 
 

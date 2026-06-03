@@ -24,7 +24,7 @@ const addJobValidator = z.object({
 
   keySkills: z.array(z.string(2)).min(1, "Atleast one requirement is required"),
 
-  yearOfExp: z.enum(["0-1", "1-3", "3-5", "5-8", "8+"]),
+  yearOfExp: z.enum(["0-1", "1-2", "2-5", "5-8", "8+"]),
 
   location: z.string().min(2, "location name too short"),
 
@@ -49,7 +49,7 @@ const getJobsValidator = z.object({
         max : z.number().nullable().optional(),
         min : z.number().nullable().optional(),
     }).optional(),
-    yearOfExp :   z.enum(["0-1", "1-3", "3-5", "5-8", "8+"]).optional(),
+    yearOfExp :   z.enum(["0-1", "1-2", "2-5", "5-8", "8+"]).optional(),
     keySkills: z.array(z.string(2)).min(1, "Atleast one requirement is required").optional(),          
 }).optional();
 

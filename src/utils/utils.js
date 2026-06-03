@@ -1,7 +1,15 @@
 const { z } = require('zod');
 const mongoose = require('mongoose');
 const path = require("path");
-const fs = require('fs')
+const fs = require('fs');
+const winston = require('winston');
+
+
+const { combine, timestamp, printf } = winston.format;
+
+
+
+
 
 const objectIdSchemaValidation = z.string().refine(val => mongoose.Types.ObjectId.isValid(val) , 'object id is incorrect');
 
@@ -21,4 +29,11 @@ const saveResume = (file) => {
 }
 
 
-module.exports = {objectIdSchemaValidation , saveResume };
+const customLoggerFormat = printf(
+    ({level , message , timestamp , stack , service}) => {
+        return `[${timestamp}] [${service ? service : ''}] ${level.toUpperCase()} : ${stack || message}`
+    }
+)
+
+
+module.exports = {objectIdSchemaValidation , saveResume , customLoggerFormat };

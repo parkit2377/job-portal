@@ -26,7 +26,7 @@ const jobSchema = mongoose.Schema({
     },
     yearOfExp : {
         type : String,
-        enum : ['0-1' , '1-3' , '3-5' , '5-8' , '8+']
+        enum : ["0-1", "1-2", "2-5", "5-8", "8+"]
     },
     location : {
         type : String,

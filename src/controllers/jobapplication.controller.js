@@ -25,7 +25,7 @@ const changeJobApplicationStatus = asyncHandler ( async ( req , res ) =>{
 
 
 const getJobApplications = asyncHandler(async(req , res) => {
-    const applications = await jobApplicationService.getJobApplications(req.validatedData , req.user);
+    const applications = await jobApplicationService.getJobApplications(req.params , req.user , req.query);
 
     res.status(200).json(
         new ApiResponse(true , "job applications fetched successfully" , applications)

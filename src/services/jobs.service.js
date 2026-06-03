@@ -2,8 +2,13 @@ const { param } = require("../app");
 const jobsModel = require("../models/jobs.model");
 const recuiterModel = require("../models/recuiter.model");
 const userModel = require("../models/user.model");
+const logger = require("../utils/logger");
 const { Forbidden, InternalServerError, NotFound, BadRequest } = require("../utils/resposonses");
 
+
+const jobLogger = logger.child({
+    service : 'job-service'
+})
 
 
 const addJobService = async ( body , user ) => {
@@ -68,8 +73,9 @@ const getJobs = async(body , user) => {
 
     // console.log(filter);
     
-    const jobs = await jobsModel.find(filter);
-
+    const jobs = await jobsModel.find(filter).explain("executionStats");
+    jobLogger.error('jobs fetched ');
+    // logger.info('fetching job completed...')
     return jobs;
     
     
