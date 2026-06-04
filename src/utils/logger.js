@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const logger = winston.createLogger({
     transports : [
-        new winston.transports.Console(),
+        // new winston.transports.Console(),
         new winston.transports.File({
             filename : './logs/logs.error.log',
             level : 'error'
@@ -21,8 +21,23 @@ const logger = winston.createLogger({
         }),
         // winston.format.simple()
         customLoggerFormat
-    )
+    ),
+
+    exceptionHandlers: [
+        new winston.transports.File({
+            filename: "./logs/exceptions.log"
+        })
+    ],
+
+    rejectionHandlers: [
+  new winston.transports.File({
+    filename: "./logs/rejections.log"
+  })
+]
 })
+
+
+
 
 
 

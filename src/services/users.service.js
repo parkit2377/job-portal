@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { BadRequest, NotFound, UnAuthenticated } = require("../utils/resposonses");
 const candidateModel = require("../models/candidate.model");
 const recuiterModel = require("../models/recuiter.model");
-
+const { redisClient } = require('../utils/redis');
 
 //register user 
 const registerUser = async(validatedBody) => {
@@ -21,6 +21,7 @@ const registerUser = async(validatedBody) => {
 
 const login = async(validatedBody) => {
     const user = await userModel.findOne({email : validatedBody.email});
+    
     if(!user)throw new UnAuthenticated("Please enter valid username and password");
 
 
@@ -48,7 +49,7 @@ const login = async(validatedBody) => {
 
     const token = jwt.sign(payload , process.env.API_KEY , {expiresIn : '1h'});
     const refreshToken = jwt.sign(payload , process.env.API_KEY , {expiresIn : '2d'});
-    
+    // redisClient.setEx(`refres:${refreshToken}` , 7 * 24 * 60 * 60 , JSON.stringify(user?._id));
     //cookies send will be here 
     
     

@@ -5,7 +5,7 @@ const multer = require('multer');
 const { addCandidateValidator, updateCandidateValidator } = require('../validators/candidate.validator');
 const { addCandidate, getCandidateProfile, updateCandidate } = require('../controllers/candidate.controller');
 const router = express.Router();
-const upload = multer({dest : 'uploads/candidate/resume'})
+const upload = multer({dest : 'uploads/candidate/resume' , limits : {fileSize : 5 * 1024 * 1024}})
 
 router.use(auth);
 
