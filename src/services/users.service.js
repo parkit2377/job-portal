@@ -49,7 +49,7 @@ const login = async(validatedBody) => {
 
     const token = jwt.sign(payload , process.env.API_KEY , {expiresIn : '1h'});
     const refreshToken = jwt.sign(payload , process.env.API_KEY , {expiresIn : '2d'});
-    // redisClient.setEx(`refres:${refreshToken}` , 7 * 24 * 60 * 60 , JSON.stringify(user?._id));
+    redisClient.setEx(`refres:${refreshToken}` , 7 * 24 * 60 * 60 , JSON.stringify(user?._id));
     //cookies send will be here 
     
     
