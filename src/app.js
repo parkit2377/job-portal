@@ -14,6 +14,8 @@ const rateLimitMiddleware = require('./middlewares/rate-limit.middleware');
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(helmet({
     contentSecurityPolicy : false
 }))
