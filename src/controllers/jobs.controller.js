@@ -40,6 +40,15 @@ const getJobs = asyncHandler(async(req , res) => {
 })
 
 
+const getJobsRedis = asyncHandler(async(req , res) => {
+    const jobs = await jobsService.getJobsRedis(req.validatedData , req.user);
+
+    res.status(200).json(
+        new ApiResponse(true , "Jobs fetched successfully" , jobs)
+    );
+})
+
+
 const closeJobApplication = asyncHandler(async(req , res) => {
     const closed = await jobsService.closeJobApplicationService(req.validatedquery , req.user);
 
@@ -50,4 +59,4 @@ const closeJobApplication = asyncHandler(async(req , res) => {
 })
 
 
-module.exports = { addJob , updateJob , getJobs , removeJob , closeJobApplication };
+module.exports = { addJob , updateJob , getJobs , removeJob , closeJobApplication , getJobsRedis };

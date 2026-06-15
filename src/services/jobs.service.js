@@ -3,6 +3,7 @@ const jobsModel = require("../models/jobs.model");
 const recuiterModel = require("../models/recuiter.model");
 const userModel = require("../models/user.model");
 const logger = require("../utils/logger");
+const { redisClient, getOrSet } = require("../utils/redis");
 const { Forbidden, InternalServerError, NotFound, BadRequest } = require("../utils/resposonses");
 
 
@@ -40,6 +41,7 @@ const updateJob = async(body , user , params) => {
             ...body
         }
     } , {returnDocument: 'after' , runValidators : true});
+    logger.info("Job Details Update successfully")
     
     return update
     
@@ -73,12 +75,69 @@ const getJobs = async(body , user) => {
 
     // console.log(filter);
     
-    const jobs = await jobsModel.find(filter).explain("executionStats");
-    jobLogger.error('jobs fetched ');
+    const jobs = await jobsModel.find(filter);
+    // redisClient.get
+    jobLogger.info('jobs fetched ');
+    redisClient.setEx(`job:list` , 3000 , JSON.stringify(jobs) , )
+    // for (let i = 0; i < 100; i++) {
+    //     // const element = array[i];
+    //     redisClient.setEx(`job:${i}` , 300 , `No : ${i}`)
+        
+    // }
+    // redisClient.
+
+    // redisClient.expire('test:1' , 300 , 'NX')    
+    // let cursor = '0'
+    // do{
+    //     const res = await redisClient.scan(
+    //         cursor , {"MATCH" : "job:*" , "COUNT" : 100}
+    //     )
+    //     const nextCursor = res.cursor;
+    //     // console.log(res);
+    //     // console.log(res.keys.length);
+        
+    //     cursor = nextCursor
+    // }while (cursor!= '0')
+
+
     // logger.info('fetching job completed...')
     return jobs;
     
     
+}
+
+
+const getJobsRedis = async(body , user) => {
+    return getOrSet(`job:${body?.location}` , 300 , async() => {
+
+
+        let filter = {isActive : true};
+    // filter.isActive = true;
+    if(body?.location){
+        filter.location = { $regex: body.location, $options: 'i' };
+    }
+
+    if(body?.keySkills && body?.keySkills.length){
+        filter.keySkills = {$in : body.keySkills};
+    }
+
+    if(body?.salary?.min || body?.salary?.max){
+        filter['salary.min'] = {};
+        if(body?.salary?.min)
+            filter['salary.min'].$gte = Number(body.salary.min);
+        if(body?.salary?.max)
+            filter['salary.min'].$lte = Number(body.salary.max)
+    }
+
+    if(body?.yearOfExp)
+        filter['yearOfExp'] = body.yearOfExp;
+
+    
+
+        const jobs = await jobsModel.find(filter);
+
+        return jobs
+    })
 }
 
 
@@ -118,4 +177,4 @@ const closeJobApplicationService = async(params , user) => {
 
 
 
-module.exports = { addJobService , updateJob , getJobs , removeJobService , closeJobApplicationService }
+module.exports = { addJobService , updateJob , getJobs , removeJobService , closeJobApplicationService , getJobsRedis }

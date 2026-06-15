@@ -14,7 +14,23 @@ const connectRedis = async () => {
   console.log("Redis connected");
 };
 
+
+const getOrSet = async(key , ttl , func) => {
+  const cacheData = await redisClient.get(key);
+
+  if(cacheData)return cacheData;
+
+  const data = await func();
+
+  
+
+  redisClient.setex(key , ttl , JSON.stringify(data));
+
+  return data;
+}
+
 module.exports = {
   redisClient,
-  connectRedis
+  connectRedis,
+  getOrSet
 };

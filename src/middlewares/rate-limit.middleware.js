@@ -8,10 +8,10 @@ const rateLimitMiddleware = asyncHandler(async(req , res , next) => {
     const key = `req:ip:${req.ip}`
 
     const currReq = await redisClient.incr(key);
-    console.log(currReq);
+    // console.log(currReq);
     
     if(currReq === 1){
-        console.log('expiry set to ip');
+        // console.log('expiry set to ip');
         
         redisClient.expire(key , 15 * 60 ,'NX')
     }
