@@ -13,13 +13,13 @@ const jobLogger = logger.child({
 
 
 const addJobService = async ( body , user ) => {
-    // console.log(body);
+    // //console.log(body);
     const recruiter = await recuiterModel.findOne({userId : user.userId}).select('userId').populate('userId' , 'role');
     
     if(!recruiter)throw new NotFound("Recruiter not found")
     
     if(recruiter?.userId?.role !== 'R')throw new Forbidden("Only recruiters can create jobs");
-    // console.log({body , recruiterId : userRole?._id});
+    // //console.log({body , recruiterId : userRole?._id});
     
     const job = await jobsModel.create({...body , recruiterId : recruiter?._id , userId : user?.userId});
 
@@ -73,12 +73,12 @@ const getJobs = async(body , user) => {
         filter['yearOfExp'] = body.yearOfExp;
 
 
-    // console.log(filter);
+    // //console.log(filter);
     
     const jobs = await jobsModel.find(filter);
     // redisClient.get
     jobLogger.info('jobs fetched ');
-    redisClient.setEx(`job:list` , 3000 , JSON.stringify(jobs) , )
+    redisClient.setex(`job:list` , 3000 , JSON.stringify(jobs) , )
     // for (let i = 0; i < 100; i++) {
     //     // const element = array[i];
     //     redisClient.setEx(`job:${i}` , 300 , `No : ${i}`)
@@ -93,8 +93,8 @@ const getJobs = async(body , user) => {
     //         cursor , {"MATCH" : "job:*" , "COUNT" : 100}
     //     )
     //     const nextCursor = res.cursor;
-    //     // console.log(res);
-    //     // console.log(res.keys.length);
+    //     // //console.log(res);
+    //     // //console.log(res.keys.length);
         
     //     cursor = nextCursor
     // }while (cursor!= '0')
@@ -143,7 +143,7 @@ const getJobsRedis = async(body , user) => {
 
 
 const removeJobService = async(params , user) => {
-    // console.log(params);
+    // //console.log(params);
     const job = await jobsModel.findById(params?.jobId).select('recruiterId isActive');
     
     if(!job?.isActive)throw new BadRequest("Job already removed/inactive");

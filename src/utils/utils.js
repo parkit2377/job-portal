@@ -19,7 +19,7 @@ const objectIdSchemaValidation = z.string().refine(val => mongoose.Types.ObjectI
 const saveResume = (file) => {
     const oldPath = file.path;
     const newFilename = 'job_portal' + new Date().getTime() + path.extname(file.originalname);
-    // console.log(newFilename);
+    // //console.log(newFilename);
     
     const newPath = path.join('uploads/candidate/resume', newFilename);
     fs.rename(oldPath, newPath, (err) => {

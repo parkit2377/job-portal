@@ -9,7 +9,7 @@ const helmet = require('helmet');
 const hpp = require('hpp');
 const mongoSanitize = require('mongo-sanitize');
 const rateLimit = require('express-rate-limit');
-const { connectRedis, redisClient } = require('./utils/redis');
+const {  redisClient } = require('./utils/redis');
 const rateLimitMiddleware = require('./middlewares/rate-limit.middleware');
 
 const app = express();
@@ -53,6 +53,7 @@ app.use(rateLimitMiddleware);
 // )
 
 
+
 //routes used
 app.use('/api/v1/users' , require('./routes/users.route'));
 app.use('/api/v1/recruiter' , require('./routes/recruiter.routes'));
@@ -65,7 +66,7 @@ app.use(errorHandler);
 
 //db connection
 connectDb();
-connectRedis();
+// if(process.env.NODE_ENV='development')connectRedis();
 
 
 

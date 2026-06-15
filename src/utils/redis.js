@@ -1,18 +1,20 @@
 const { createClient } = require("redis");
+const { Redis } = require('ioredis');
+const env = require('dotenv').config();
 
-const redisClient = createClient({
-  url: "redis://localhost:6379"
-});
+// let redisClient;
 
-redisClient.on("error", (err) => {
-  console.log("Redis Error:", err);
-});
+// const redis = createClient({
+//   url: "redis://localhost:6379"
+// });
 
-const connectRedis = async () => {
-  await redisClient.connect();
+const ioRedis = new Redis(process.env.NODE_ENV == 'development' ? "redis://localhost:6379" : process.env.IOREDIS)
 
-  console.log("Redis connected");
-};
+
+
+const redisClient = ioRedis;
+
+ 
 
 
 const getOrSet = async(key , ttl , func) => {
@@ -31,6 +33,6 @@ const getOrSet = async(key , ttl , func) => {
 
 module.exports = {
   redisClient,
-  connectRedis,
-  getOrSet
+  getOrSet,
+  ioRedis
 };

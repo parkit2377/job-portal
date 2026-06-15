@@ -4,7 +4,7 @@ const userService = require('../services/users.service');
 const { ApiResponse } = require('../utils/resposonses');
 
 const registerUser = asyncHandler(async(req , res) => {
-    // console.log(req.validatedData);
+    // //console.log(req.validatedData);
     const user = await userService.registerUser(req.validatedData);
 
     res.json(new ApiResponse(true , "User Created Successfully" , user))

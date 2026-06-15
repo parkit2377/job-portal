@@ -51,7 +51,7 @@ const updateRecruiter = async( body , user) => {
     const update = await recuiterModel.findOneAndUpdate({userId : user?.userId} , body , {
         returnDocument: 'after' , runValidators : true
     });
-    console.log(update);
+    //console.log(update);
     
     if(!update)throw new NotFound();
 

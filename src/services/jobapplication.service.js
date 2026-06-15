@@ -33,15 +33,15 @@ const jobApplicationService = async(body , user) => {
 
 
 const getJobApplications = async(params , user , query) => {
-    console.log(params);
-    console.log(query);
+    //console.log(params);
+    //console.log(query);
     
     const job = await jobsModel.findById({_id : params?.jobId}).select('recruiterId');
 
     if(!job?.recruiterId.equals(user.recruiterId))throw new Forbidden("Only Job recruiter can see job applications");
 
     const applications = await jobAppliesModel.find({jobId : params?.jobId}).populate('candidateId' , 'resume profileSummary skills').limit(query?.limit || 10).skip((query.page - 1)  * query.limit);
-    console.log(applications.map(i => i._id));
+    //console.log(applications.map(i => i._id));
     return applications
     
 }
@@ -67,7 +67,7 @@ const changeJobApplicationStatus = async(body , user) => {
 const getCandidateAllApplicationService = async(user) => {
     const applications = await jobAppliesModel.find({candidateId : user?.candidateId}).limit(10).sort({createdAt : -1}).populate('jobId' , 'title description requirments keySkills');
 
-    console.log(applications);
+    //console.log(applications);
     return applications;
     
 }

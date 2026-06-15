@@ -4,6 +4,12 @@ const { BadRequest, ConflictError, NotFound } = require("../utils/resposonses");
 const candidateModel = require("../models/candidate.model");
 const { saveResume } = require("../utils/utils");
 const path = require('path');
+const logger = require("../utils/logger");
+
+
+const candidateLogger = logger.child({
+  service : "candidate"
+})
 
 const addCandidateService = async (body, user, file) => {
   const candidateExist = await candidateModel.exists({ userId: user?.userId });
@@ -23,6 +29,7 @@ const addCandidateService = async (body, user, file) => {
     skills: body?.skills,
     userId: user?.userId,
   });
+  candidateLogger.info("Candidate Added " + candidate?._id);
 
   return candidate;
 };
@@ -35,7 +42,7 @@ const getCandidateProfileService = async (user) => {
       match: {"isActive" : true},
       select: "name email mobileNo role dob createdAt",
     })
-  console.log(candidate);
+  //console.log(candidate);
   if(!candidate) throw new NotFound("Candidate profile not found");
   return candidate
 };

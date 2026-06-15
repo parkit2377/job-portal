@@ -30,10 +30,10 @@ const randomSkills = () => SKILLS
     .slice(0, Math.floor(Math.random() * 4) + 2);
 
 const seed = async () => {
-    console.log(process.env.DB_CONNECTION);
+    //console.log(process.env.DB_CONNECTION);
     
     await mongoose.connect(process.env.DB_CONNECTION);
-    console.log('DB connected');
+    // //console.log('DB connected');
 
     // Clear existing data
     await Promise.all([
@@ -43,11 +43,11 @@ const seed = async () => {
         jobsModel.deleteMany({}),
         jobAppliesModel.deleteMany({})
     ]);
-    console.log('Cleared existing data');
+    // //console.log('Cleared existing data');
 
     // ── Step 1 — Create 150 users ──────────────────────────
     const hashedPassword = await bcrypt.hash('Password123@', 10);
-    console.log(faker.name.fullName());
+    // //console.log(faker.name.fullName());
     
     const userData = Array.from({ length: 150 }, (_, i) => ({
         name     : faker.name.fullName(),
@@ -60,7 +60,7 @@ const seed = async () => {
     }));
 
     const users = await userModel.insertMany(userData);
-    console.log(`Created ${users.length} users`);
+    // //console.log(`Created ${users.length} users`);
 
     const recruiterUsers = users.filter(u => u.role === 'R');
     const candidateUsers = users.filter(u => u.role === 'C');
@@ -76,7 +76,7 @@ const seed = async () => {
     }));
 
     const recruiters = await recuiterModel.insertMany(recruiterData);
-    console.log(`Created ${recruiters.length} recruiters`);
+    // //console.log(`Created ${recruiters.length} recruiters`);
 
     // ── Step 3 — Create candidate profiles ────────────────
     const candidateData = candidateUsers.map(user => ({
@@ -87,7 +87,7 @@ const seed = async () => {
     }));
 
     const candidates = await candidateModel.insertMany(candidateData);
-    console.log(`Created ${candidates.length} candidates`);
+    // //console.log(`Created ${candidates.length} candidates`);
 
     // ── Step 4 — Create 100 jobs ───────────────────────────
     const jobData = Array.from({ length: 100 }, (_, i) => {
@@ -119,7 +119,7 @@ const seed = async () => {
     });
 
     const jobs = await jobsModel.insertMany(jobData);
-    console.log(`Created ${jobs.length} jobs`);
+    //console.log(`Created ${jobs.length} jobs`);
 
     // ── Step 5 — Create 200 applications ──────────────────
     // track candidateId+jobId combinations to avoid duplicates
@@ -149,12 +149,12 @@ const seed = async () => {
     }
 
     await jobAppliesModel.insertMany(applicationData);
-    console.log(`Created ${applicationData.length} applications`);
+    //console.log(`Created ${applicationData.length} applications`);
 
-    console.log('\n✅ Seeding complete');
-    console.log('Test credentials:');
-    console.log('  Email    : user0<timestamp>@test.com');
-    console.log('  Password : Password123@');
+    //console.log('\n✅ Seeding complete');
+    //console.log('Test credentials:');
+    //console.log('  Email    : user0<timestamp>@test.com');
+    //console.log('  Password : Password123@');
 
     await mongoose.disconnect();
 };
