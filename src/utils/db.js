@@ -12,8 +12,8 @@ const connectDb = async() => {
         // console.log('trying db connection');
         
         
-        const connection = await mongoose.connect(process.env.DEPOLYDB);
-        // console.log('db connected with ' , connection.connection.db.databaseName);
+        const connection = await mongoose.connect(process.env.NODE_ENV='development' ? process.env.DB_CONNECTION :  process.env.DEPOLYDB);
+        console.log('db connected with ' , connection.connection.db.databaseName);
         dbLogger.info('db connected with ' , connection.connection.db.databaseName);
     }catch{
         // console.log(process.env.DEPOLYDB);

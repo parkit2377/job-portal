@@ -28,8 +28,8 @@ Recruiter: recruiter0@test.com / Password123@
 - Soft delete with cascade
 
 ## API Endpoints
-POST   /api/v1/users/register
-POST   /api/v1/users/login
-POST   /api/v1/jobs/get-jobs
-POST   /api/v1/jobs/add-job
-... etc
+- POST   /api/v1/users/register
+- POST   /api/v1/users/login
+- POST   /api/v1/jobs/get-jobs
+- POST   /api/v1/jobs/add-job
+- ... etc
