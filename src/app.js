@@ -14,7 +14,7 @@ const rateLimitMiddleware = require('./middlewares/rate-limit.middleware');
 
 const app = express();
 
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
 
 app.use(helmet({
     contentSecurityPolicy : false
@@ -67,6 +67,8 @@ app.use(errorHandler);
 
 
 //db connection
+console.log('connecting db');
+
 connectDb();
 // if(process.env.NODE_ENV='development')connectRedis();
 
